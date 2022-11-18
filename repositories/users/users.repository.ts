@@ -47,6 +47,24 @@ class UserRepository {
             await prismaClient.$disconnect();
         });
     }
+
+    /**
+     * Find a specific user
+     * @returns User
+     */
+     async find(user: User) {
+        return await prismaClient.user.findFirst({ 
+            where: {
+                username: user.username
+            }
+        })
+        .catch((e) => {
+            throw e;
+        })
+        .finally(async () => {
+            await prismaClient.$disconnect();
+        });
+    }
 }
 
 export const userRepository = new UserRepository();

@@ -46,5 +46,25 @@ export default class UserController {
                 }
             }
         });
+
+        router.post('/api/users/login', {
+            schema: {
+                body: userRequestSchema
+            },
+            handler: async (request: any, reply: any) => {
+                try {
+                    const { username, password } = request.body;
+                    var user: User = {
+                        username: username,
+                        password: password
+                    }
+                    var jwt = await userService.login(user);
+                    return reply.code(200).send({username: username, token: jwt});
+                } catch (error) {
+                    request.log.error(error!);
+                    return reply.code(500).send(error);
+                }
+            }
+        });
     }
 }
