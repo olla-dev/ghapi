@@ -4,6 +4,18 @@ import { User } from './user';
 class UserRepository {
 
     async create(user: User) {
+        let userInDb = await prismaClient.user.count(
+            {
+              where: {
+                username: user.username
+              }
+            }
+        )
+
+        if (userInDb > 0) {
+            throw 'User already exists'
+        } 
+
         return await prismaClient.user.create({
             data: {
                 ...user
