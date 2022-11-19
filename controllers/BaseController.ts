@@ -24,6 +24,16 @@ export default class BaseController {
                 return reply.code(500).send(error);
             }
         });
+
+        router.get('/api/github/feed', {}, async (request: any, reply: any) => {
+            try {
+                const events = await githubApiService.feed();
+                return reply.code(200).send(events);
+            } catch (error) {
+                request.log.error(error!);
+                return reply.code(500).send(error);
+            }
+        });
     }
 
     async sayHello(request: any, reply: any): Promise<string> {

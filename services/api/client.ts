@@ -21,7 +21,7 @@ import axios, {
   
     initClient() {
       const axiosClient = axios.create({
-        baseURL: "https://apidddddd.github.com",
+        baseURL: process.env.GITHUB_API_BASE_URL,
         headers,
         withCredentials: false,
       });
