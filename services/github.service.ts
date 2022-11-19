@@ -36,6 +36,26 @@ class GithubApiService {
             }
         }
     }
+
+    /**
+     * Get public github feed. 
+     * @returns 
+     */
+    async feed() {
+        try {
+            const response =  await httpClient.get('/events');
+            return response.data
+        } catch(error: any) {
+            return {
+                "name": "github-api",
+                "version": "1.0",
+                "time": Date.now(),
+                "down": true,
+                "error": error,
+                "errorCode": error.code
+            }
+        }
+    }
 }
 
 export const githubApiService = new GithubApiService();
