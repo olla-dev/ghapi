@@ -1,6 +1,8 @@
 import { User } from "../repositories/users/user";
 import { userRepository } from "../repositories/users/users.repository";
 import bcrypt from 'bcrypt';
+import jsonwebtoken from 'jsonwebtoken';
+const { sign, decode, verify } = jsonwebtoken;
 
 class UserService {
     /**
@@ -39,9 +41,16 @@ class UserService {
             throw 'Wrong password'
         }
 
-        var jwt = ''
+        const token = sign({ 
+            id: userInDb.id.toString(), 
+            username: userInDb.username 
+        }, process.env.SECRET_KEY!, {expiresIn: '10d'});
 
-        return jwt;
+        // store token in db
+        userInDb.token = token;
+        userRepository.update(userInDb);
+
+        return token;
     }
 }
 

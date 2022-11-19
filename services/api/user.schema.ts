@@ -15,3 +15,11 @@ export const userResponseSchema = {
     },
   },
 }
+
+export const userLoginResponseSchema = {
+    type: 'object',
+    properties: {
+      username: { type: 'string' },
+      token: { type: 'string' },
+    },
+}

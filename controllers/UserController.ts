@@ -1,6 +1,6 @@
 import {FastifyInstance} from "fastify";
 import { User } from "../repositories/users/user";
-import { userRequestSchema, userResponseSchema } from "../services/api/user.schema";
+import { userLoginResponseSchema, userRequestSchema, userResponseSchema } from "../services/api/user.schema";
 import { userService } from '../services/user.service'
 
 export default class UserController {
@@ -29,7 +29,7 @@ export default class UserController {
 
         router.post('/api/users', {
             schema: {
-                body: userRequestSchema
+                body: userRequestSchema,
             },
             handler: async (request: any, reply: any) => {
                 try {
@@ -49,7 +49,10 @@ export default class UserController {
 
         router.post('/api/users/login', {
             schema: {
-                body: userRequestSchema
+                body: userRequestSchema,
+                response: {
+                    200: userLoginResponseSchema
+                },
             },
             handler: async (request: any, reply: any) => {
                 try {
