@@ -1,6 +1,6 @@
 import {FastifyInstance} from "fastify";
 import { User } from "../repositories/users/user";
-import { userRequestSchema, userResponseSchema } from "../services/api/user.schema";
+import { userLoginResponseSchema, userRequestSchema, userResponseSchema } from "../services/api/user.schema";
 import { userService } from '../services/user.service'
 
 export default class UserController {
@@ -29,7 +29,7 @@ export default class UserController {
 
         router.post('/api/users', {
             schema: {
-                body: userRequestSchema
+                body: userRequestSchema,
             },
             handler: async (request: any, reply: any) => {
                 try {
@@ -40,6 +40,29 @@ export default class UserController {
                     }
                     await userService.create(newUser);
                     return reply.code(200).send('User registred');
+                } catch (error) {
+                    request.log.error(error!);
+                    return reply.code(500).send(error);
+                }
+            }
+        });
+
+        router.post('/api/users/login', {
+            schema: {
+                body: userRequestSchema,
+                response: {
+                    200: userLoginResponseSchema
+                },
+            },
+            handler: async (request: any, reply: any) => {
+                try {
+                    const { username, password } = request.body;
+                    var user: User = {
+                        username: username,
+                        password: password
+                    }
+                    var jwt = await userService.login(user);
+                    return reply.code(200).send({username: username, token: jwt});
                 } catch (error) {
                     request.log.error(error!);
                     return reply.code(500).send(error);

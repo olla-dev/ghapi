@@ -28,6 +28,22 @@ class UserRepository {
         });
     }
 
+    async update(user: User) {
+        return await prismaClient.user.update({
+            where: {
+                id: user.id
+            },
+            data: {
+                ...user
+            },
+        }).catch((e) => {
+            throw e;
+        })
+        .finally(async () => {
+            await prismaClient.$disconnect();
+        });
+    }
+
     /**
      * Lists all users
      * @returns User[]
@@ -38,6 +54,24 @@ class UserRepository {
                 id: true,
                 username: true,
                 createdAt: true,
+            }
+        })
+        .catch((e) => {
+            throw e;
+        })
+        .finally(async () => {
+            await prismaClient.$disconnect();
+        });
+    }
+
+    /**
+     * Find a specific user
+     * @returns User
+     */
+     async find(user: User) {
+        return await prismaClient.user.findFirst({ 
+            where: {
+                username: user.username
             }
         })
         .catch((e) => {

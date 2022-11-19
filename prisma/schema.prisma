@@ -15,4 +15,6 @@ model User {
   createdAt DateTime @default(now())
   username      String
   password  String
+  token String @default("")
+  tokenExpires String @default("10d")
 }

@@ -1,6 +1,8 @@
 export type User = {
     id?: number;
-    createdAt?: string;
+    createdAt?: Date;
     username: string;
     password: string;
+    token?: String;
+    tokenExpires?: String;
 };
