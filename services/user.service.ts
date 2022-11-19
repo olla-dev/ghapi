@@ -1,8 +1,10 @@
 import { User } from "../repositories/users/user";
 import { userRepository } from "../repositories/users/users.repository";
+import { JwtToken } from "../domain/api";
 import bcrypt from 'bcrypt';
 import jsonwebtoken from 'jsonwebtoken';
 const { sign, decode, verify } = jsonwebtoken;
+
 
 class UserService {
     /**
@@ -51,6 +53,28 @@ class UserService {
         userRepository.update(userInDb);
 
         return token;
+    }
+
+    /**
+     * Return authenticated username
+     * @returns 
+     */
+     async profile(authToken: string) {
+        if(!authToken) {
+            throw 'Auth info missing'
+        }
+
+        var decodedToken = verify(
+            authToken, 
+            process.env.SECRET_KEY!) as JwtToken;
+        
+        var userInDb = await userRepository.findByUsername(decodedToken.username);
+
+        if(!userInDb) {
+            throw 'User not found';
+        }
+        
+        return userInDb;
     }
 }
 

@@ -16,10 +16,25 @@ export const userResponseSchema = {
   },
 }
 
+export const userProfileResponseSchema = {
+  type: 'object',
+  properties: {
+    username: { type: 'string' },
+  }
+}
+
 export const userLoginResponseSchema = {
     type: 'object',
     properties: {
       username: { type: 'string' },
       token: { type: 'string' },
     },
+}
+
+export const userAuthenticationHeaderSchema = {
+    type: 'object',
+    properties: {
+      "x-authorization": { type: 'string' },
+    },
+    required: ["x-authorization"]
 }
