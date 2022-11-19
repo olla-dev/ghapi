@@ -1,5 +1,6 @@
 import {FastifyInstance} from "fastify";
 import EasterEgg from "../domain/egg";
+import { userRequestSchema } from "../services/api/user.schema";
 import { githubApiService } from '../services/github.service'
 
 export default class BaseController {
@@ -34,6 +35,18 @@ export default class BaseController {
                 return reply.code(500).send(error);
             }
         });
+
+        router.get('/api/github/users/:username', {
+            handler: async (request: any, reply: any) => {
+            try {
+                const { username } = request.params;
+                const events = await githubApiService.profile(username);
+                return reply.code(200).send(events);
+            } catch (error) {
+                request.log.error(error!);
+                return reply.code(500).send(error);
+            }
+        }});
     }
 
     async sayHello(request: any, reply: any): Promise<string> {
